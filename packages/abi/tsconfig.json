@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "src"
+  },
+  "exclude": ["src/**/*.test.ts"],
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "json": "../../website/generated/abi.json"
+  }
+}
