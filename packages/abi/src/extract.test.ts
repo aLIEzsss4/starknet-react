@@ -119,4 +119,16 @@ describe('abi parameter to primitive type', () => {
       extra: 2,
     })
   })
+
+  it('works with tuples', () => {
+    expectType<
+      AbiParameterToPrimitiveType<typeof erc20Abi, { name: ''; type: '(felt, felt, felt)' }>
+    >([1, 2, 3])
+  })
+
+  it('works with structs inside tuples', () => {
+    expectType<
+      AbiParameterToPrimitiveType<typeof erc20Abi, { name: ''; type: '(felt, Uint256, felt)' }>
+    >([1, { low: 0, high: 2 }, 3])
+  })
 })

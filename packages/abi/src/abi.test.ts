@@ -1,5 +1,5 @@
 import { erc20Abi, expectType } from '../test'
-import { CairoFunction, Felt } from './abi'
+import { CairoFunction, CairoTuple, Felt } from './abi'
 
 describe('cairo types', () => {
   test('felt', () => {
@@ -7,6 +7,10 @@ describe('cairo types', () => {
   })
   test('cairo function', () => {
     expectType<CairoFunction>('function')
+  })
+  test('cairo tuple', () => {
+    expectType<CairoTuple>('(felt, felt)')
+    expectType<CairoTuple>('(felt, Uint256)')
   })
 })
 

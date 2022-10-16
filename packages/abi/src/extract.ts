@@ -1,4 +1,4 @@
-import { Abi, AbiMember, AbiParameter, AbiType, CairoFunction, Felt } from './abi'
+import { Abi, AbiMember, AbiParameter, AbiType, CairoFunction, CairoTuple, Felt } from './abi'
 
 export type ExtractAbiFunctions<TAbi extends Abi> = Extract<TAbi[number], { type: 'function' }>
 
@@ -18,12 +18,14 @@ export type ExtractAbiStruct<
   TStructName extends ExtractAbiStructNames<TAbi>
 > = Extract<ExtractAbiStructs<TAbi>, { name: TStructName }>
 
-export type AbiTypeToPrimitiveType<TAbiType extends AbiType> = PrimitiveTypeLookup[TAbiType]
+export type AbiTypeToPrimitiveType<TAbi extends Abi, TAbiType extends AbiType> = PrimitiveTypeLookup<TAbi>[TAbiType]
 
-type PrimitiveTypeLookup = {
+type PrimitiveTypeLookup<TAbi extends Abi> = {
   [_ in Felt]: number
 } & {
   [_ in CairoFunction]: number
+} & {
+  [_ in CairoTuple]: [number, number]
 }
 
 /* eslint-disable */
@@ -32,7 +34,7 @@ export type AbiParameterToPrimitiveType<
   TAbiParameter extends AbiParameter
 > =
   TAbiParameter['type'] extends AbiType
-    ? AbiTypeToPrimitiveType<TAbiParameter['type']>
+    ? AbiTypeToPrimitiveType<TAbi, TAbiParameter['type']>
     : ExtractAbiStruct<TAbi, TAbiParameter['type']> extends {
         type: 'struct',
         members: infer TMembers extends readonly AbiMember[]

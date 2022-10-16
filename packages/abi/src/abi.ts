@@ -1,7 +1,21 @@
 export type Felt = 'felt'
 export type CairoFunction = 'function'
 
-export type AbiType = Felt | CairoFunction
+type MAX_TUPLE_SIZE = 20
+
+type _BuildTuple<
+  R extends unknown = never,
+  A extends string = '',
+  D extends readonly number[] = []
+> = D['length'] extends MAX_TUPLE_SIZE
+  ? `${A})` | R
+  : A extends ''
+  ? _BuildTuple<R, `(${string}`, [...D, 1]>
+  : _BuildTuple<`${A})` | R, `${A}, ${string}`, [...D, 1]>
+
+export type CairoTuple = _BuildTuple
+
+export type AbiType = Felt | CairoFunction | CairoTuple
 
 export type ResolvedAbiType = AbiType
 
